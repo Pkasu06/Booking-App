@@ -5,6 +5,8 @@ import useUpdatePart from "@/app/_hooks/part-api/useUpdatePart";
 import { mockPartsData } from "@/app/utility/mockData/mockGetPartsApi";
 import { partsAttributes } from "@/constants";
 import { useEffect, useState } from "react";
+import { FaTrashCan } from "react-icons/fa6";
+import { MdAddBox } from "react-icons/md";
 
 type Part = {
   id: string;
@@ -155,23 +157,37 @@ export default function InventoryPage() {
 }
 
 function InventoryTools() {
-  const modalBtn = (
+  const addModalBtn = (
     <div className="flex justify-center items-center">
-      <div className="btn bg-green-700 text-white text-lg w-30 hover:-translate-y-1 hover:bg-green-700">
-        +
+      <div className="btn bg-[#4796BD] text-white text-lg min-w-20 hover:-translate-y-1 hover:bg-[#4796BD]">
+        <MdAddBox />
+      </div>
+    </div>
+  );
+  const removeModalBtn = (
+    <div className="flex justify-center items-center">
+      <div className="btn bg-[#4796BD] text-white text-lg min-w-20 hover:-translate-y-1 hover:bg-[#4796BD]">
+        <FaTrashCan />
       </div>
     </div>
   );
   return (
-    <Modal
-      label="add"
-      modalBtn={modalBtn}>
-      <AddNewPartForm></AddNewPartForm>
-    </Modal>
+    <div className="flex">
+      <Modal
+        label="add"
+        modalBtn={addModalBtn}>
+        <AddNewItemForm></AddNewItemForm>
+      </Modal>
+      <Modal
+        label="remove"
+        modalBtn={removeModalBtn}>
+        <RemoveItem></RemoveItem>
+      </Modal>
+    </div>
   );
 }
 
-function AddNewPartForm() {
+function AddNewItemForm() {
   return (
     <form
       onSubmit={(event) => event.preventDefault()}
@@ -224,4 +240,8 @@ function AddNewPartForm() {
       </div>
     </form>
   );
+}
+
+function RemoveItem() {
+  return <div>remove item</div>;
 }
