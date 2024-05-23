@@ -81,7 +81,7 @@ async function createPart(part) {
   const body = JSON.stringify(part);
   const response = await fetch(`${API_URL}/parts`, {
     body,
-    method: "PUT",
+    method: "POST",
     headers: { "Content-Type": "application/json" },
   });
   if (!response.ok) {
