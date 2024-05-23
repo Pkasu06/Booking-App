@@ -41,7 +41,6 @@ export default function InventoryPage() {
   const totalPages = Math.ceil(partsData.length / inventoryPerPage);
 
   useEffect(() => {
-    console.log("get parts");
     fetchInventory();
   }, []);
 
