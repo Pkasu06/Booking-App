@@ -20,7 +20,7 @@ const Modal = ({
   const dataTestId = testId ? testId : "modal" + label + uuidv4().slice(-8);
 
   return (
-    <section>
+    <section className="bg-white">
       {/* You can open the modal using document.getElementById('ID').showModal() method */}
       {modalBtn ? (
         <div
@@ -42,10 +42,12 @@ const Modal = ({
           {label}
         </div>
       )}
+
+      {/* inside of modal */}
       <dialog
         id={modalId}
         className="modal">
-        <div className="modal-box">
+        <div className="modal-box bg-white">
           <form method="dialog">
             {/* if there is a button in form, it will close the modal */}
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -54,7 +56,7 @@ const Modal = ({
           </form>
 
           {/* component to display */}
-          <section>{children}</section>
+          <section className="">{children}</section>
         </div>
       </dialog>
     </section>

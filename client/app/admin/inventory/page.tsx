@@ -16,13 +16,16 @@ type Part = {
 };
 
 export default function InventoryPage() {
-  const [partsData, setPartsData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [partsData, setPartsData] = useState([]);
+
   const {
     data: partsDataFromApi,
     isLoading: partsDataLoading,
     error: partsDataError,
+    fetchData: fetchInventory,
   } = useGetParts(false);
+
   const {
     updatePart,
     error: updatePartsError,
@@ -38,7 +41,11 @@ export default function InventoryPage() {
   const totalPages = Math.ceil(partsData.length / inventoryPerPage);
 
   useEffect(() => {
-    if (partsDataFromApi) {
+    fetchInventory();
+  }, []);
+
+  useEffect(() => {
+    if (partsDataFromApi.length > 0) {
       setPartsData(partsDataFromApi);
     }
   }, [partsDataFromApi]);
@@ -191,7 +198,7 @@ function AddNewItemForm() {
   return (
     <form
       onSubmit={(event) => event.preventDefault()}
-      className="flex flex-col gap-2 min-h-[500px]">
+      className="flex flex-col gap-2 min-h-[500px] ">
       <section>
         <h3>Add item to inventory</h3>
       </section>
