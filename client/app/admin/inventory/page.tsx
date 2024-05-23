@@ -45,7 +45,6 @@ export default function InventoryPage() {
   }, []);
 
   useEffect(() => {
-    console.log("partsDataFromApi", partsDataFromApi);
     if (partsDataFromApi.length > 0) {
       setPartsData(partsDataFromApi);
     }
