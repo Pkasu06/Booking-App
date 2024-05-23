@@ -22,6 +22,7 @@ export default function InventoryPage() {
     data: partsDataFromApi,
     isLoading: partsDataLoading,
     error: partsDataError,
+    fetchData: fetchInventory,
   } = useGetParts(false);
   const {
     updatePart,
@@ -38,6 +39,12 @@ export default function InventoryPage() {
   const totalPages = Math.ceil(partsData.length / inventoryPerPage);
 
   useEffect(() => {
+    console.log("get parts");
+    fetchInventory();
+  }, []);
+
+  useEffect(() => {
+    console.log("partsDataFromApi", partsDataFromApi);
     if (partsDataFromApi) {
       setPartsData(partsDataFromApi);
     }

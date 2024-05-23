@@ -5,45 +5,33 @@ export default function useGetParts(lowInventory = false) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const controller = new AbortController();
-
+  const fetchData = async () => {
     setError(null);
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
+    try {
+      setIsLoading(true);
 
-        const res = await fetchPartsData({
-          signal: controller.signal,
-          lowInventory,
-        });
+      const res = await fetchPartsData({
+        lowInventory,
+      });
 
-        setError(null);
-        setData(res.data);
-      } catch (error) {
-        console.log("failed to fetch parts", error);
-        setData([]);
-        setError({ message: "Failed to fetch parts", error });
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      setError(null);
+      setData(res.data);
+    } catch (error) {
+      console.log("failed to fetch parts", error);
+      setData([]);
+      setError({ message: "Failed to fetch parts", error });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    fetchData();
-
-    return () => {
-      controller.abort();
-    };
-  }, []);
-
-  return { data, isLoading, error };
+  return { data, isLoading, error, fetchData };
 }
 
-async function fetchPartsData({ signal, lowInventory }) {
+async function fetchPartsData({ lowInventory }) {
   const params = new URLSearchParams({ lowInventory });
 
   const response = await fetch(`/api/parts?${params}`, {
-    signal,
     headers: {
       "Content-Type": "application/json",
     },
