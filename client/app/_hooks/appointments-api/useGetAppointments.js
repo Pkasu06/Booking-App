@@ -9,9 +9,9 @@ export default function useGetAppointments(date) {
     setError(null);
     try {
       setIsLoading(true);
+      console.log("date", date);
 
       const res = await fetchAppointmentsData({
-        signal: controller.signal,
         date,
       });
       setError(null);
@@ -36,9 +36,9 @@ export default function useGetAppointments(date) {
   return { data, error, isLoading, fetchData };
 }
 
-async function fetchAppointmentsData({ date, signal }) {
+async function fetchAppointmentsData({ date }) {
   const params = new URLSearchParams({ date });
-  const response = await fetch(`/api/appointments?${params}`, { signal });
+  const response = await fetch(`/api/appointments?${params}`);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }

@@ -6,26 +6,34 @@ import "react-datepicker/dist/react-datepicker.css";
 import useGetAppointments from "@/app/_hooks/appointments-api/useGetAppointments";
 import useGetServices from "@/app/_hooks/service-api/useGetServices";
 import { timeSlots } from "@/constants";
-import { mockData } from "@/app/utility/mockData/mockGetAppointmentsApi";
 import { appointmentAttributes } from "@/constants";
 import { formatDateWithNoSlash } from "@/app/utility/formatDateWithNoSlash";
 import useGetParts from "@/app/_hooks/part-api/useGetParts";
+
 export default function AppointmentsPage() {
   const [startDate, setStartDate] = useState(new Date().toLocaleDateString());
-  const { data: appointmentsListData, error: appointmentsListError } =
-    useGetAppointments(formatDateWithNoSlash(startDate));
+
+  const {
+    data: appointmentsListData,
+    error: appointmentsListError,
+    fetchData: getAppointmentsData,
+  } = useGetAppointments(formatDateWithNoSlash(startDate));
+
   const { data: serviceList, error: serviceListError } = useGetServices();
+
   const {
     data: partsData,
     error: partsError,
     isLoading: partsIsLoading,
   } = useGetParts();
   const [currentPage, setCurrentPage] = useState(1);
+
   const appointmentsPerPage = 6;
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
   const getServicesDataFromCollection = (serviceId) => {
     return serviceList.find((service) => service.id === serviceId);
   };
@@ -62,21 +70,27 @@ export default function AppointmentsPage() {
   // 	}
   // }, [appointmentsListData]);
 
-  console.log(
-    "🚀 ~ AppointmentsPage ~ currentAppointments:",
-    currentAppointments
-  );
-  console.log(
-    "🚀 ~ AppointmentsPage ~ appointmentsListError:",
-    appointmentsListError
-  );
+  useEffect(() => {
+    getAppointmentsData();
+  }, [startDate]);
+
+  // console.log(
+  //   "🚀 ~ AppointmentsPage ~ currentAppointments:",
+  //   currentAppointments
+  // );
+  // console.log(
+  //   "🚀 ~ AppointmentsPage ~ appointmentsListError:",
+  //   appointmentsListError
+  // );
 
   return (
     <>
       <div className="date-picker-container">
         <DatePicker
           selected={startDate}
-          onChange={(date) => setStartDate(date.toLocaleDateString())}
+          onChange={(date) => {
+            setStartDate(date.toLocaleDateString());
+          }}
           className="bg-white border-black border-2 rounded-lg px-3 py-2 outline-none focus:ring"
         />
       </div>
