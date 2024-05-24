@@ -1,18 +1,16 @@
 import { useRef, useState } from "react";
 
+type NewItem = {
+  name: string;
+  quantity: number;
+  threshold: number;
+};
 export default function usePostPart() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const controller = useRef(new AbortController());
 
-  //  newPartData:{
-  //     "partId":12345,
-  // 	"name":"test",
-  // 	"quantity":10,
-  // 	"threshold":5
-  // }
-
-  async function postPart(newPartData) {
+  async function postPart(newPartData: NewItem) {
     try {
       if (controller.current.signal.aborted) {
         controller.current = new AbortController();
