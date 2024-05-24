@@ -1,20 +1,11 @@
 "use client";
-import Modal from "@/app/_components/Modals/Modal";
 import useGetParts from "@/app/_hooks/part-api/useGetParts";
 import useUpdatePart from "@/app/_hooks/part-api/useUpdatePart";
 import { partsAttributes } from "@/constants";
 import { useEffect, useState } from "react";
-import { FaTrashCan } from "react-icons/fa6";
-import { MdAddBox } from "react-icons/md";
-import usePostPart from "@/app/_hooks/part-api/usePostPart";
-import { useRouter } from "next/navigation";
+import { InventoryTools } from "./_components/InventoryTools";
 
-type Part = {
-  id: string;
-  name: string;
-  quantity: number;
-  threshold: number;
-};
+
 
 export default function InventoryPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -162,114 +153,4 @@ export default function InventoryPage() {
       </section>
     </div>
   );
-}
-
-function InventoryTools() {
-  const addModalBtn = (
-    <div className="flex justify-center items-center">
-      <div className="btn bg-[#4796BD] text-white text-lg min-w-20 hover:-translate-y-1 hover:bg-[#4796BD]">
-        <MdAddBox />
-      </div>
-    </div>
-  );
-  const removeModalBtn = (
-    <div className="flex justify-center items-center">
-      <div className="btn bg-[#4796BD] text-white text-lg min-w-20 hover:-translate-y-1 hover:bg-[#4796BD]">
-        <FaTrashCan />
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="flex">
-      <Modal
-        label="add"
-        modalBtn={addModalBtn}>
-        <AddNewItemForm />
-      </Modal>
-      <Modal
-        label="remove"
-        modalBtn={removeModalBtn}>
-        <RemoveItem />
-      </Modal>
-    </div>
-  );
-}
-
-function AddNewItemForm() {
-  const { isLoading, postPart } = usePostPart();
-  const router = useRouter();
-  return (
-    <form
-      onSubmit={async (event) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const formEntries = Object.fromEntries(formData.entries());
-
-        try {
-          await postPart({
-            name: formEntries.name as string,
-            quantity: Number(formEntries.quantity),
-            threshold: Number(formEntries.threshold),
-          });
-
-          window.location.reload();
-        } catch (error) {
-          console.log("error post part data");
-          console.log("error", error);
-        }
-      }}
-      className="flex flex-col gap-2 min-h-[500px] ">
-      <section>
-        <h3>Add item to inventory</h3>
-      </section>
-      <label
-        htmlFor="name"
-        className="input input-bordered flex items-center gap-2 text-black">
-        Item name:
-        <input
-          id="name"
-          name="name"
-          type="text"
-          className="grow"
-          placeholder="Type here"
-        />
-      </label>
-      <label
-        htmlFor="quantity"
-        className="input input-bordered flex items-center gap-2 text-black">
-        Quantity:
-        <input
-          id="quantity"
-          name="quantity"
-          type="text"
-          className="grow"
-          placeholder="Type here"
-        />
-      </label>
-      <label
-        htmlFor="threshold"
-        className="input input-bordered flex items-center gap-2 text-black">
-        Inventory low alert:
-        <input
-          id="threshold"
-          name="threshold"
-          type="number"
-          min={0}
-          className="grow"
-          placeholder="optional"
-        />
-      </label>
-
-      <div className="flex justify-end">
-        <button className="btn bg-green-700 hover:bg-green-700 hover:scale-105 text-white">
-          add item
-        </button>
-      </div>
-    </form>
-  );
-}
-
-function RemoveItem() {
-  return <div>remove item</div>;
 }
