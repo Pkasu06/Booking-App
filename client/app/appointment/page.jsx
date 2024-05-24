@@ -48,7 +48,7 @@ export default function AppointmentPage() {
   useEffect(() => {
     fetchServices();
     getTimeSlots();
-  }, []);
+  }, [startDate]);
 
   const serviceInputHandler = (e) => {
     setService(e.target.value);
