@@ -2,11 +2,12 @@
 import Modal from "@/app/_components/Modals/Modal";
 import useGetParts from "@/app/_hooks/part-api/useGetParts";
 import useUpdatePart from "@/app/_hooks/part-api/useUpdatePart";
-import { mockPartsData } from "@/app/utility/mockData/mockGetPartsApi";
 import { partsAttributes } from "@/constants";
 import { useEffect, useState } from "react";
 import { FaTrashCan } from "react-icons/fa6";
 import { MdAddBox } from "react-icons/md";
+import usePostPart from "@/app/_hooks/part-api/usePostPart";
+import { useRouter } from "next/navigation";
 
 type Part = {
   id: string;
@@ -178,26 +179,46 @@ function InventoryTools() {
       </div>
     </div>
   );
+
   return (
     <div className="flex">
       <Modal
         label="add"
         modalBtn={addModalBtn}>
-        <AddNewItemForm></AddNewItemForm>
+        <AddNewItemForm />
       </Modal>
       <Modal
         label="remove"
         modalBtn={removeModalBtn}>
-        <RemoveItem></RemoveItem>
+        <RemoveItem />
       </Modal>
     </div>
   );
 }
 
 function AddNewItemForm() {
+  const { isLoading, postPart } = usePostPart();
+  const router = useRouter();
   return (
     <form
-      onSubmit={(event) => event.preventDefault()}
+      onSubmit={async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const formEntries = Object.fromEntries(formData.entries());
+
+        try {
+          await postPart({
+            name: formEntries.name as string,
+            quantity: Number(formEntries.quantity),
+            threshold: Number(formEntries.threshold),
+          });
+
+          window.location.reload();
+        } catch (error) {
+          console.log("error post part data");
+          console.log("error", error);
+        }
+      }}
       className="flex flex-col gap-2 min-h-[500px] ">
       <section>
         <h3>Add item to inventory</h3>
