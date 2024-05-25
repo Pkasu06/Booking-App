@@ -4,10 +4,11 @@ import { useEffect } from "react";
 const driftKey = process.env.NEXT_PUBLIC_DRIFT_KEY;
 
 const useDrift = () => {
-  console.log("driftKey", driftKey);
   useEffect(() => {
     // Avoid duplicate loading
-    if (window.drift) return;
+    if (window.drift) {
+      return;
+    }
 
     // Initialization script
     (function () {
@@ -58,6 +59,7 @@ const useDrift = () => {
       }
     })();
     drift.SNIPPET_VERSION = "0.3.1";
+
     drift.load(driftKey);
 
     // Cleanup function to remove script if component unmounts
