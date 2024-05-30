@@ -1,13 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import {
-  useAuthState,
-  useCreateUserWithEmailAndPassword,
-} from "react-firebase-hooks/auth";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 
-export default function AdminSignUp() {
+export default function SignUp() {
   const [signupEmail, setSignupEmail] = useState("");
   const [signupPassword, setSignupPassword] = useState("");
   const [

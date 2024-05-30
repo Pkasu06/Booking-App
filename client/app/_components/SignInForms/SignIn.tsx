@@ -3,7 +3,7 @@ import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 
-export default function AdminSignIn() {
+export default function SignIn() {
   const router = useRouter();
   const [signinEmail, setSigninEmail] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
