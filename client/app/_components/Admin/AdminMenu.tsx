@@ -13,6 +13,7 @@ export default function AdminMenu() {
   const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
 
+  //need useEffect b/c component needs to be mounted before being able to route
   useEffect(() => {
     if (!user) {
       router.push("/adminSignInAndSignUp");
