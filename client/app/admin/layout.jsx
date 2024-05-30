@@ -12,7 +12,7 @@ export default async function Layout({ children }) {
         <div>{children}</div>
       </div>
 
-      <AdminMenu></AdminMenu>
+      <AdminMenu />
     </div>
   );
 }
