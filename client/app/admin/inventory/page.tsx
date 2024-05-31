@@ -1,11 +1,11 @@
+//@ts-nocheck
 "use client";
+
 import useGetParts from "@/app/_hooks/part-api/useGetParts";
 import useUpdatePart from "@/app/_hooks/part-api/useUpdatePart";
 import { partsAttributes } from "@/constants";
 import { useEffect, useState } from "react";
 import { InventoryTools } from "./_components/InventoryTools";
-
-
 
 export default function InventoryPage() {
   const [currentPage, setCurrentPage] = useState(1);

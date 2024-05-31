@@ -7,7 +7,7 @@ type NewItem = {
 };
 export default function usePostPart() {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<null | string>(null);
   const controller = useRef(new AbortController());
 
   async function postPart(newPartData: NewItem) {

@@ -16,7 +16,9 @@ export default function SignUp() {
   const [signUpAlert, setSignUpAlert] = useState("");
   const router = useRouter();
 
-  const signUpFormSubmitHandler = async (e) => {
+  const signUpFormSubmitHandler = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
     try {
       const res = await createUserWithEmailAndPassword(

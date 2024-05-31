@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export default function useGetParts(lowInventory = false) {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<null | { message: string }>(null);
 
   const fetchData = async () => {
     setError(null);
@@ -19,7 +19,7 @@ export default function useGetParts(lowInventory = false) {
     } catch (error) {
       console.log("failed to fetch parts", error);
       setData([]);
-      setError({ message: "Failed to fetch parts", error });
+      setError({ message: "Failed to fetch parts" });
     } finally {
       setIsLoading(false);
     }
@@ -28,8 +28,8 @@ export default function useGetParts(lowInventory = false) {
   return { data, isLoading, error, fetchData };
 }
 
-async function fetchPartsData({ lowInventory }) {
-  const params = new URLSearchParams({ lowInventory });
+async function fetchPartsData({ lowInventory }: { lowInventory: boolean }) {
+  const params = new URLSearchParams({ lowInventory: String(lowInventory) });
 
   const response = await fetch(`/api/parts?${params}`, {
     headers: {

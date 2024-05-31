@@ -21,7 +21,9 @@ export default function SignIn() {
     }
   }, [signInError]);
 
-  const signInFormSubmitHandler = async (e) => {
+  const signInFormSubmitHandler = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
     try {
       const res = await signInWithEmailAndPassword(signinEmail, signinPassword);

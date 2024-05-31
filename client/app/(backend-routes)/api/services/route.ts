@@ -19,10 +19,11 @@ export async function GET(request: NextRequest) {
       status: 200,
     });
   } catch (error) {
+    const typeError = error as { message: string };
     const body = JSON.stringify({
       data: [],
       message: "failed to get services list",
-      error: error?.message,
+      error: typeError?.message,
     });
 
     return new Response(body, {
