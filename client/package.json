@@ -12,7 +12,7 @@
     "@chatscope/chat-ui-kit-react": "^2.0.3",
     "@chatscope/chat-ui-kit-styles": "^1.4.0",
     "firebase": "^10.10.0",
-    "next": "14.1.4",
+    "next": "^14.1.4",
     "react": "^18",
     "react-datepicker": "^6.6.0",
     "react-dom": "^18",
@@ -21,6 +21,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^14.2.3",
     "@types/react": "18.3.2",
     "@types/uuid": "^9.0.8",
     "autoprefixer": "^10.0.1",
