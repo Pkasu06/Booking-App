@@ -18,7 +18,7 @@ export default function AdminMenu() {
     if (!user) {
       router.push("/adminSignInAndSignUp");
     }
-  }, [user, loading, error]);
+  }, [user]);
 
   return (
     <div>
