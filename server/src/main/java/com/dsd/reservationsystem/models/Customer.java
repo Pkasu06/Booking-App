@@ -26,7 +26,12 @@ public class Customer {
 
     public Customer() {
     }
-
+    public Customer(AppointmentPostRequest.CustomerInfo customerInfo) {
+        this.address=customerInfo.getAddress();
+        this.email=(customerInfo.getEmail());
+        this.name=(customerInfo.getName());
+        this.phoneNumber=(customerInfo.getPhoneNumber());
+    }
     public String getId() {
         return id;
     }

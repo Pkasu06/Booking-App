@@ -5,6 +5,7 @@ import com.dsd.reservationsystem.models.Appointment;
 import com.dsd.reservationsystem.models.AppointmentPostRequest;
 import com.dsd.reservationsystem.models.Customer;
 import com.dsd.reservationsystem.models.DaySchedule;
+import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +36,11 @@ public class AppointmentService {
         // existing or new customer
         Customer customer;
         String customerEmail = appointment.getCustomerInfo().getEmail();
+
+        //extract customer info and appointment time from postrequest class
         AppointmentPostRequest.CustomerInfo customerInfo = appointment.getCustomerInfo();
         AppointmentPostRequest.AppointmentTime appointmentTime = appointment.getAppointmentTime();
+
 
         // try to find customer info by email
         try {
@@ -48,11 +52,8 @@ public class AppointmentService {
             if (foundCustomer.isEmpty()) {
 
                 // create new customer from request
-                Customer newCustomer = new Customer();
-                newCustomer.setAddress(customerInfo.getAddress());
-                newCustomer.setEmail(customerInfo.getEmail());
-                newCustomer.setName(customerInfo.getName());
-                newCustomer.setPhoneNumber(customerInfo.getPhoneNumber());
+                Customer newCustomer = new Customer(customerInfo);
+
 
                 // create customer in database
                 customer = this.customerService.createCustomer(newCustomer);
@@ -71,13 +72,19 @@ public class AppointmentService {
             throw new RuntimeException(e);
         }
 
+
         // create new appointment from request
+        // GETTING GOOGLE TIMESTAMP INSTANCE
+        Timestamp googleTimestamp = Timestamp.parseTimestamp(appointmentTime.getTimestamp().toString());
+
         Appointment newAppointment = new Appointment();
         newAppointment.setTimeSlot(appointmentTime.getTimeSlot());
         newAppointment.setDate(appointmentTime.getDate());
         newAppointment.setServiceId(customerInfo.getServiceId());
         newAppointment.setConfirmationNumber(UUID.randomUUID().toString());
-        newAppointment.setStatus("PENDING");
+        newAppointment.setCustomerId(customer.getId());
+        newAppointment.setTimestamp(googleTimestamp);
+
 
         // update appointments on customer
         customer.addAppointment(newAppointment);

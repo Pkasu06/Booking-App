@@ -1,5 +1,7 @@
 package com.dsd.reservationsystem.models;
 
+import java.time.Instant;
+
 //request for post appointment
 public class AppointmentPostRequest {
   private AppointmentTime appointmentTime;
@@ -40,9 +42,18 @@ public class AppointmentPostRequest {
   public class AppointmentTime {
     private String date;
     private String timeSlot;
+    private Instant timestamp;
 
     public AppointmentTime() {
 
+    }
+
+    public Instant getTimestamp() {
+      return timestamp;
+    }
+
+    public void setTimestamp(Instant timestamp) {
+      this.timestamp = timestamp;
     }
 
     public String getDate() {
@@ -66,6 +77,7 @@ public class AppointmentPostRequest {
       return "AppointmentTime{" +
           "date='" + date + '\'' +
           ", timeSlot='" + timeSlot + '\'' +
+          ", timestamp=" + timestamp +
           '}';
     }
   }
