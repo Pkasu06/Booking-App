@@ -35,6 +35,8 @@ public class AppointmentService {
         // existing or new customer
         Customer customer;
         String customerEmail = appointment.getCustomerInfo().getEmail();
+
+        //extract customer info and appointment time from postrequest class
         AppointmentPostRequest.CustomerInfo customerInfo = appointment.getCustomerInfo();
         AppointmentPostRequest.AppointmentTime appointmentTime = appointment.getAppointmentTime();
 
@@ -48,11 +50,11 @@ public class AppointmentService {
             if (foundCustomer.isEmpty()) {
 
                 // create new customer from request
-                Customer newCustomer = new Customer();
-                newCustomer.setAddress(customerInfo.getAddress());
-                newCustomer.setEmail(customerInfo.getEmail());
-                newCustomer.setName(customerInfo.getName());
-                newCustomer.setPhoneNumber(customerInfo.getPhoneNumber());
+                Customer newCustomer = new Customer(customerInfo);
+//                newCustomer.setAddress(customerInfo.getAddress());
+//                newCustomer.setEmail(customerInfo.getEmail());
+//                newCustomer.setName(customerInfo.getName());
+//                newCustomer.setPhoneNumber(customerInfo.getPhoneNumber());
 
                 // create customer in database
                 customer = this.customerService.createCustomer(newCustomer);
