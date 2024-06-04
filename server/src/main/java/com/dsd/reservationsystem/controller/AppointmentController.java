@@ -37,6 +37,7 @@ public class AppointmentController {
             response.put("day", savedAppointment.getDate());
             response.put("timeSlot", savedAppointment.getTimeSlot());
             response.put("confirmationID", savedAppointment.getConfirmationNumber());
+            response.put("timestamp", savedAppointment.getTimestamp().toString());
 
             return new ResponseEntity<HashMap>(response, HttpStatus.OK);
         } catch (Exception e) {
