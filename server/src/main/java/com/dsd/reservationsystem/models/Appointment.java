@@ -8,7 +8,7 @@ public class Appointment {
     private String timeSlot;
     private String confirmationNumber;
     private String serviceId;
-    private String Status;
+    private String Status = "PENDING";
 
     public Appointment() {
     }

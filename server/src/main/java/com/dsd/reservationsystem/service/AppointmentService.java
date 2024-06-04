@@ -80,7 +80,6 @@ public class AppointmentService {
         newAppointment.setServiceId(customerInfo.getServiceId());
         newAppointment.setConfirmationNumber(UUID.randomUUID().toString());
         newAppointment.setCustomerId(customer.getId());
-        newAppointment.setStatus("PENDING");
 
         // update appointments on customer
         customer.addAppointment(newAppointment);
