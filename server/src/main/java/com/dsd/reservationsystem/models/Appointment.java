@@ -10,6 +10,10 @@ public class Appointment {
     private String serviceId;
     private String Status;
 
+    public Appointment() {
+    }
+    public Appointment(AppointmentPostRequest appointmentPostRequest) {
+    }
 
     public String getTimeSlot() {
         return timeSlot;
