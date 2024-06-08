@@ -5,8 +5,11 @@ import com.dsd.reservationsystem.models.Appointment;
 import com.dsd.reservationsystem.models.AppointmentPostRequest;
 import com.dsd.reservationsystem.models.Customer;
 import com.dsd.reservationsystem.models.DaySchedule;
+import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.WriteResult;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -200,4 +203,10 @@ public class AppointmentService {
         return appointmentsList;
     }
 
+    public String createAppointment(Appointment appointment) {
+        DocumentReference docRef = database.collection("appointments").document();
+        String newId = docRef.getId();
+        ApiFuture<WriteResult> resultApiFuture = docRef.set(appointment);
+        return newId;
+    }
 }
