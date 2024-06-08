@@ -203,6 +203,7 @@ public class AppointmentService {
         return appointmentsList;
     }
 
+    //create entry into database and returns the document id
     public String createAppointment(Appointment appointment) {
         DocumentReference docRef = database.collection("appointments").document();
         String newId = docRef.getId();
