@@ -13,8 +13,14 @@ export default function AppointmentPage() {
   // const [serviceList, setServiceList] = useState(mockServicesData);
   // const [timeSlotsList, setTimeSlotsList] = useState(mockTimeSlotsData);
 
-  const [startDate, setStartDate] = useState(new Date().toLocaleDateString());
-  const dateWithNoHyphens = formatDate(startDate);
+  // const [startDate, setStartDate] = useState(new Date().toLocaleDateString());
+  // const dateWithNoHyphens = formatDate(startDate);
+  const [startDate, setStartDate] = useState(new Date());
+  const dateWithNoHyphens = formatDate(startDate.toLocaleDateString());
+
+  useEffect(() => {
+    console.log("startDate", startDate.toISOString());
+  }, [startDate]);
 
   const {
     data: serviceList,
@@ -46,7 +52,9 @@ export default function AppointmentPage() {
   } = usePostAppointment();
 
   useEffect(() => {
-    fetchServices();
+    if (!serviceList || serviceList.length == 0) {
+      fetchServices();
+    }
     getTimeSlots();
   }, [startDate]);
 
@@ -146,7 +154,7 @@ export default function AppointmentPage() {
       (timeSlotKey) => timeSlots[timeSlotKey] === appointment
     );
     const selectedService = serviceList.find((item) => item.name === service);
-    const formattedDate = startDate.split("/");
+    const formattedDate = startDate.toLocaleDateString().split("/");
     let [month, day, year] = formattedDate;
     if (month.length === 1) {
       month = "0" + month;
@@ -157,7 +165,11 @@ export default function AppointmentPage() {
     const dateWithNoHyphens = month + day + year;
 
     const data = {
-      appointmentTime: { date: dateWithNoHyphens, timeSlot: timeSlotKey },
+      appointmentTime: {
+        date: dateWithNoHyphens,
+        timeSlot: timeSlotKey,
+        timestamp: startDate.toISOString(),
+      },
       customerInfo: {
         address: street + " " + apt,
         name: firstName + " " + lastName,
@@ -166,6 +178,8 @@ export default function AppointmentPage() {
         serviceId: selectedService.id,
       },
     };
+
+    console.log("post data", data);
 
     try {
       const response = await postAppointment(data);
@@ -211,7 +225,7 @@ export default function AppointmentPage() {
               tabIndex={0}
               role="button"
               className="btn btn-lg w-full col-span-1 ">
-              Service Date - {startDate}
+              Service Date - {startDate.toLocaleDateString()}
             </div>
             <div
               tabIndex={0}
@@ -223,7 +237,12 @@ export default function AppointmentPage() {
                 <DatePicker
                   className="text-white"
                   selected={startDate}
-                  onChange={(date) => setStartDate(date.toLocaleDateString())}
+                  // onChange={(date) => setStartDate(date.toLocaleDateString())}
+                  onChange={(date) => {
+                    setStartDate(date);
+                    // console.log("date", date.toISOString());
+                    // setTimeStamp(date.toISOString());
+                  }}
                 />
               </div>
             </div>
@@ -317,7 +336,9 @@ export default function AppointmentPage() {
             <p className="py-5 text-xl">Name: {firstName + " " + lastName}</p>
             <p className="py-5 text-xl">Phone number: {phone}</p>
             <p className="py-5 text-xl">Selected service: {service}</p>
-            <p className="py-5 text-xl">Selected date: {startDate}</p>
+            <p className="py-5 text-xl">
+              Selected date: {startDate.toLocaleDateString()}
+            </p>
             <p className="py-5 text-xl">Selected time: {appointment}</p>
           </div>
           <div>
