@@ -78,22 +78,17 @@ public class AppointmentController {
     }
 
     @GetMapping("/day")
-    public ResponseEntity<List<HashMap<String, Object>>> getAppointments(@RequestParam Instant timeStamp)
+    public ResponseEntity<List<Appointment>> getAppointments(@RequestParam("timeStamp") Instant timeStamp)
             throws ExecutionException, InterruptedException {
+        List<Appointment> foundAppointments = new ArrayList<>();
 
-        System.out.println(timeStamp);
+        try {
+            foundAppointments = appointmentService.getAppointmentsForDay(timeStamp);
+            return ResponseEntity.ok(foundAppointments);
 
-        // List<Appointment> appointments =
-        // appointmentService.getAppointmentsForDay(date);
-//        try {
-//
-//            List<HashMap<String, Object>> appointments = appointmentService.getAppointmentsForDay(date);
-        List<HashMap<String, Object>> appointments = new ArrayList<>();
-        return ResponseEntity.ok(appointments);
-//
-//        } catch (Exception e) {
-//            //if failed to reach database
-//            return ResponseEntity.internalServerError().build();
-//        }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+
     }
 }
