@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -73,5 +75,20 @@ public class AppointmentController {
             //if failed to reach database
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @GetMapping("/day")
+    public ResponseEntity<List<Appointment>> getAppointments(@RequestParam("timeStamp") Instant timeStamp)
+            throws ExecutionException, InterruptedException {
+        List<Appointment> foundAppointments = new ArrayList<>();
+
+        try {
+            foundAppointments = appointmentService.getAppointmentsForDay(timeStamp);
+            return ResponseEntity.ok(foundAppointments);
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+
     }
 }
