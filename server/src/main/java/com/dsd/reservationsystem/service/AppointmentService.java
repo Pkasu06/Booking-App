@@ -135,43 +135,12 @@ public class AppointmentService {
     //create entry into database and returns the document id
     public void createAppointment(Appointment appointment) throws ExecutionException, InterruptedException {
         DocumentReference docRef = database.collection("appointments").document();
-//        String newId = docRef.getId();
-//        System.out.println("new doc id");
-//        System.out.println(newId);
         ApiFuture<WriteResult> resultApiFuture = docRef.set(appointment);
         resultApiFuture.get();
     }
 
-//    public Appointment addAppointmentToCustomer(String customerId, Appointment appointment) {
-//        // Fetch the customer by ID
-//        Customer customer = database.getCustomerById(customerId);
-//        if (customer != null) {
-//            // Add the new appointment to the customer's list of appointments
-//            List<Appointment> appointments = customer.getAppointments();
-//            appointments.add(appointment);
-//            customer.setAppointments(appointments);
-//
-//            // Save the customer back to the database
-//            database.createCustomer(customer);
-//
-//            // Add the appointment as a time slot for the given date
-//            DaySchedule daySchedule;
-//            try {
-//                daySchedule = database.getTimeSlotsForDay(appointment.getDate());
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return null;
-//            }
-//            daySchedule.appointments().put(appointment.getTimeSlot(), appointment);
-//            database.updateTimeSlotsForDay(appointment.getDate(), daySchedule.appointments());
-//
-//            return appointment;
-//        } else {
-//            return null;
-//        }
-//    }
-
     //get the appointments for day or return empty list if none found
+    //TODO DEPRECATE this for method with Instant
     public List<HashMap<String, Object>> getAppointmentsForDay(String date)
             throws Exception {
 
