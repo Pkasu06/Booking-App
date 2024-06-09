@@ -11,6 +11,8 @@ import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.WriteResult;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
@@ -220,6 +222,72 @@ public class AppointmentService {
 
         }
 
+        return appointmentsList;
+    }
+
+
+    public List<HashMap<String, Object>> getAppointmentsForDay(Instant date)
+            throws Exception {
+
+        CollectionReference appointmentsCollection = database.collection("appointments");
+        List<HashMap<String, Object>> appointmentsList = new ArrayList<>();
+
+        System.out.println("date in");
+        System.out.println(date);
+
+
+        Instant startDate = date.truncatedTo(ChronoUnit.DAYS);
+        Instant endDate = date.plus(1, ChronoUnit.DAYS);
+
+        System.out.println("start Date");
+        System.out.println(startDate);
+
+        System.out.println("end date");
+        System.out.println(endDate);
+//
+//        Map<String, Object> daysTimeSlots;
+//
+//        try {
+//            //get data from database
+//            daysTimeSlots = database.getAppointmentsForDay(date);
+//
+//        } catch (Exception e) {
+//            System.out.println("failed to get appointments for day");
+//            System.out.printf(e.getMessage());
+//            throw new Exception("DataBase failed to get appointment for day" + date);
+//        }
+//        // call database for days appointments
+//
+//        // create appointment structures
+//        // loop through hash map of day timeslots and add appointments to list to
+//        // display appointments for this day
+//        for (Map.Entry<String, Object> timeSlot : daysTimeSlots.entrySet()) {
+//            HashMap<String, Object> customerAppointment = new HashMap<>();
+//            String tsCode = timeSlot.getKey();
+//            HashMap<String, String> timeSlotData = (HashMap<String, String>) timeSlot.getValue();
+//
+//            String customerId = timeSlotData.get("customerId");
+//
+//            // todo get customer info
+//            Customer customer = customerService.getCustomerById(customerId);
+//
+//            customerAppointment.put("name", customer.getName());
+//
+//            // search customers appointments for matching date and timeslot
+//            for (Appointment custAppt : customer.getAppointments()) {
+//
+//                if ((date.equals(custAppt.getDate())) && tsCode.equals(custAppt.getTimeSlot())) {
+//
+//                    customerAppointment.put("time", custAppt.getTimeSlot());
+//                    customerAppointment.put("serviceId", custAppt.getServiceId());
+//
+//                }
+//            }
+//
+//            appointmentsList.add(customerAppointment);
+//
+//        }
+//
         return appointmentsList;
     }
 }
