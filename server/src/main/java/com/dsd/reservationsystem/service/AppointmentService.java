@@ -4,7 +4,6 @@ import com.dsd.reservationsystem.database.Db;
 import com.dsd.reservationsystem.models.Appointment;
 import com.dsd.reservationsystem.models.AppointmentPostRequest;
 import com.dsd.reservationsystem.models.Customer;
-import com.dsd.reservationsystem.models.DaySchedule;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.CollectionReference;
@@ -17,12 +16,12 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 public class AppointmentService {
-    private Db database;
-    private EmailService emailService;
+    private final Db database;
+    private final EmailService emailService;
 
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
-    private TimeSlotsService timeSlotsService;
+    private final TimeSlotsService timeSlotsService;
 
     public AppointmentService(Db database, EmailService emailService, CustomerService customerService,
                               TimeSlotsService timeSlotsService) {
@@ -40,7 +39,7 @@ public class AppointmentService {
         Customer customer;
         String customerEmail = appointment.getCustomerInfo().getEmail();
 
-        //extract customer info and appointment time from postrequest class
+        //extract customer info and appointment time from post request class
         AppointmentPostRequest.CustomerInfo customerInfo = appointment.getCustomerInfo();
         AppointmentPostRequest.AppointmentTime appointmentTime = appointment.getAppointmentTime();
 
@@ -89,6 +88,18 @@ public class AppointmentService {
         newAppointment.setTimestamp(googleTimestamp);
 
 
+        //save appointment in collection
+        try {
+
+            System.out.println("saving appointment to collection");
+            createAppointment(newAppointment);
+        } catch (ExecutionException e) {
+            System.err.println("failed to save appointment into collection");
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         // update appointments on customer
         customer.addAppointment(newAppointment);
 
@@ -121,35 +132,44 @@ public class AppointmentService {
         return newAppointment;
     }
 
-    public Appointment addAppointmentToCustomer(String customerId, Appointment appointment) {
-        // Fetch the customer by ID
-        Customer customer = database.getCustomerById(customerId);
-        if (customer != null) {
-            // Add the new appointment to the customer's list of appointments
-            List<Appointment> appointments = customer.getAppointments();
-            appointments.add(appointment);
-            customer.setAppointments(appointments);
-
-            // Save the customer back to the database
-            database.createCustomer(customer);
-
-            // Add the appointment as a time slot for the given date
-            DaySchedule daySchedule;
-            try {
-                daySchedule = database.getTimeSlotsForDay(appointment.getDate());
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-            daySchedule.appointments().put(appointment.getTimeSlot(), appointment);
-            database.updateTimeSlotsForDay(appointment.getDate(), daySchedule.appointments());
-
-            return appointment;
-        } else {
-            return null;
-        }
+    //create entry into database and returns the document id
+    public void createAppointment(Appointment appointment) throws ExecutionException, InterruptedException {
+        DocumentReference docRef = database.collection("appointments").document();
+//        String newId = docRef.getId();
+//        System.out.println("new doc id");
+//        System.out.println(newId);
+        ApiFuture<WriteResult> resultApiFuture = docRef.set(appointment);
+        resultApiFuture.get();
     }
 
+//    public Appointment addAppointmentToCustomer(String customerId, Appointment appointment) {
+//        // Fetch the customer by ID
+//        Customer customer = database.getCustomerById(customerId);
+//        if (customer != null) {
+//            // Add the new appointment to the customer's list of appointments
+//            List<Appointment> appointments = customer.getAppointments();
+//            appointments.add(appointment);
+//            customer.setAppointments(appointments);
+//
+//            // Save the customer back to the database
+//            database.createCustomer(customer);
+//
+//            // Add the appointment as a time slot for the given date
+//            DaySchedule daySchedule;
+//            try {
+//                daySchedule = database.getTimeSlotsForDay(appointment.getDate());
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return null;
+//            }
+//            daySchedule.appointments().put(appointment.getTimeSlot(), appointment);
+//            database.updateTimeSlotsForDay(appointment.getDate(), daySchedule.appointments());
+//
+//            return appointment;
+//        } else {
+//            return null;
+//        }
+//    }
 
     //get the appointments for day or return empty list if none found
     public List<HashMap<String, Object>> getAppointmentsForDay(String date)
@@ -166,7 +186,7 @@ public class AppointmentService {
         } catch (Exception e) {
             System.out.println("failed to get appointments for day");
             System.out.printf(e.getMessage());
-            throw new Exception("DataBase failed to get appoinment for day" + date);
+            throw new Exception("DataBase failed to get appointment for day" + date);
         }
         // call database for days appointments
 
@@ -174,8 +194,8 @@ public class AppointmentService {
         // loop through hash map of day timeslots and add appointments to list to
         // display appointments for this day
         for (Map.Entry<String, Object> timeSlot : daysTimeSlots.entrySet()) {
-            String tsCode = timeSlot.getKey();
             HashMap<String, Object> customerAppointment = new HashMap<>();
+            String tsCode = timeSlot.getKey();
             HashMap<String, String> timeSlotData = (HashMap<String, String>) timeSlot.getValue();
 
             String customerId = timeSlotData.get("customerId");
@@ -201,13 +221,5 @@ public class AppointmentService {
         }
 
         return appointmentsList;
-    }
-
-    //create entry into database and returns the document id
-    public String createAppointment(Appointment appointment) {
-        DocumentReference docRef = database.collection("appointments").document();
-        String newId = docRef.getId();
-        ApiFuture<WriteResult> resultApiFuture = docRef.set(appointment);
-        return newId;
     }
 }
