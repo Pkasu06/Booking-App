@@ -31,7 +31,9 @@ jobs:
         run: cd server
         
       - name: Build Java with Gradle
-      - run: ./gradlew build
+        run: |
+          cd server
+          ./gradlew build
       
       - name: Build Docker Image
         run: |
