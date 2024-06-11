@@ -24,8 +24,14 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./server/gradlew
 
+      - run: echo "where we are at:"
+      - run: echo ls $(ls)
+
       - name: Build Java with Gradle
-        run: ./server/gradlew build
+      - run: cd server
+      - run: echo "where we are at:"
+      - run: echo ls $(ls)
+      - run: ./gradlew build
       
       - name: Build Docker Image
         run: |
