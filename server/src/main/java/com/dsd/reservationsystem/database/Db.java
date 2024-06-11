@@ -18,12 +18,14 @@ import java.util.concurrent.ExecutionException;
 
 @Service
 public class Db {
-    private Environment env;
     private Firestore database = null;
     private String credentialsPath = "credentials.json";
 
     public Db(Environment env) throws IOException {
-        credentialsPath = env.getProperty("credentials.path");
+        String path = env.getProperty("credentials.path", this.credentialsPath);
+
+        this.credentialsPath = path;
+
         // String credentialsPath = "/etc/secrets/credentials.json";
         // String environment = System.getenv("environment");
         // if (environment != "prod") {
@@ -272,11 +274,6 @@ public class Db {
 
         return doc;
 
-
-    }
-
-    public void setEnv(Environment env) {
-        this.env = env;
     }
 
     public void setDatabase(Firestore database) {
