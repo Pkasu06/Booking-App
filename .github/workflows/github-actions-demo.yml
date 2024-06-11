@@ -13,9 +13,13 @@ jobs:
       - run: echo "where we are at:"
       - run: echo ls $(ls)
 
-      - name: Build Docker Image
+      - name: Build Java
         run: |
           cd server
+          ./gradlew build
+      
+      - name: Build Docker Image
+        run: |
           docker build -t java-server .
           echo ${docker image ls}
     
