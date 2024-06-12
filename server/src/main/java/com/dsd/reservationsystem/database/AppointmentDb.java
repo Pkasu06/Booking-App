@@ -23,7 +23,6 @@ public class AppointmentDb {
 
     public List<Appointment> getInRange(Instant startDate, Instant endDate) throws ExecutionException, InterruptedException {
 
-
         //create date ranges
         startDate = startDate.truncatedTo(ChronoUnit.DAYS);
         endDate = endDate.plus(1, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS);
@@ -36,12 +35,10 @@ public class AppointmentDb {
         Query query = this.appointmentCollection.whereGreaterThanOrEqualTo("timestamp", startDateGoogle);
 
         //send request
-
-
         ApiFuture<QuerySnapshot> snapshot = query.get();
         List<Appointment> appointmentList = snapshot.get().toObjects(Appointment.class);
 
-        
+
         return appointmentList;
 
 

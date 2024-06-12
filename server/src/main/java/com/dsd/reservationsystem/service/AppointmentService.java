@@ -223,7 +223,6 @@ public class AppointmentService {
 
         try {
             List<Appointment> foundAppointments = appointmentDb.getInRange(startDate, endDate);
-            System.out.println(foundAppointments);
             return foundAppointments;
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
