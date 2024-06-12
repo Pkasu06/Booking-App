@@ -26,20 +26,13 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./server/gradlew
 
-      - run: echo "where we are at:"
-      - run: echo ls $(ls)
-
-      - name: Change the current dir to server
-        run: cd server
-
       - name: Build Java with Gradle
-        run: |
-          cd server
-          ./gradlew build
+        working-directory: server
+        run: ./gradlew build
 
       - name: Build Docker Image
         run: |
-          docker build -t java-server -f ./Dockerfile .
+          docker build -t java-server -f server/Dockerfile .
           echo ${docker image ls}
 
         #- run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
