@@ -27,8 +27,26 @@ jobs:
         working-directory: server
         run: ./gradlew build
 
+      - name: Verify JAR file exists
+        working-directory: server
+        run: |
+         ls build/libs
+         if [ ! -f build/libs/*.jar ]; then
+           echo "JAR file not found!"
+           exit 1
+         fi
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Build Docker Image
-        run: docker build -t java-server -f server/Dockerfile .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/java-server -f server/Dockerfile .
+
+      - name: Push Docker Image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/java-server
 
         #- run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
         #- run: echo "🖥️ The workflow is now ready to test your code on the runner."
