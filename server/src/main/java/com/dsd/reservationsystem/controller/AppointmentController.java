@@ -19,86 +19,90 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping("/api/appointment")
 public class AppointmentController {
 
-  @Autowired
-  private AppointmentService appointmentService;
+    @Autowired
+    private AppointmentService appointmentService;
 
-  @Autowired
-  private TimeSlotsService timeSlotsService;
+    @Autowired
+    private TimeSlotsService timeSlotsService;
 
-  @PostMapping("/save")
-  public ResponseEntity saveAppointment(@RequestBody AppointmentPostRequest appointmentRequest) {
-
-
-    // todo Save the appointment
-    try {
-      Appointment savedAppointment = appointmentService.saveAppointment(appointmentRequest);
-
-      HashMap<String, String> response = new HashMap<>();
-
-      response.put("status", "success");
-      response.put("day", savedAppointment.getDate());
-      response.put("timeSlot", savedAppointment.getTimeSlot());
-      response.put("confirmationID", savedAppointment.getConfirmationNumber());
-      response.put("timestamp", savedAppointment.getTimestamp().toString());
-
-      return new ResponseEntity<HashMap>(response, HttpStatus.OK);
-    } catch (Exception e) {
-
-      HashMap<String, String> response = new HashMap<>();
-      response.put("status", "failed");
-      response.put("error", e.toString());
-
-      // todo test error sent back
-      return new ResponseEntity<HashMap>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
-
-  private boolean isTimeSlotAvailable(String day, String timeSlot) {
-    // Get the time slots for the selected day
-    return timeSlotsService.isTimeSlotAvailable(day, timeSlot);
-
-  }
-
-  @GetMapping("/all")
-  public ResponseEntity<List<HashMap<String, Object>>> getAppointments(@RequestParam String date)
-      throws ExecutionException, InterruptedException {
+    @PostMapping("/save")
+    public ResponseEntity saveAppointment(@RequestBody AppointmentPostRequest appointmentRequest) {
 
 
-    // List<Appointment> appointments =
-    // appointmentService.getAppointmentsForDay(date);
-    try {
+        // todo Save the appointment
+        try {
+            Appointment savedAppointment = appointmentService.saveAppointment(appointmentRequest);
 
-      List<HashMap<String, Object>> appointments = appointmentService.getAppointmentsForDay(date);
-      return ResponseEntity.ok(appointments);
+            HashMap<String, String> response = new HashMap<>();
 
-    } catch (Exception e) {
-      //if failed to reach database
-      return ResponseEntity.internalServerError().build();
-    }
-  }
+            response.put("status", "success");
+            response.put("day", savedAppointment.getDate());
+            response.put("timeSlot", savedAppointment.getTimeSlot());
+            response.put("confirmationID", savedAppointment.getConfirmationNumber());
+            response.put("timestamp", savedAppointment.getTimestamp().toString());
 
-  @GetMapping("/day")
-  public ResponseEntity<List<Appointment>> getAppointments(@RequestParam("timeStamp") Instant timeStamp)
-      throws ExecutionException, InterruptedException {
-    List<Appointment> foundAppointments = new ArrayList<>();
+            return new ResponseEntity<HashMap>(response, HttpStatus.OK);
+        } catch (Exception e) {
 
-    try {
-      foundAppointments = appointmentService.getAppointmentsForDay(timeStamp);
-      return ResponseEntity.ok(foundAppointments);
+            HashMap<String, String> response = new HashMap<>();
+            response.put("status", "failed");
+            response.put("error", e.toString());
 
-    } catch (Exception e) {
-      return ResponseEntity.internalServerError().build();
+            // todo test error sent back
+            return new ResponseEntity<HashMap>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-  }
+    private boolean isTimeSlotAvailable(String day, String timeSlot) {
+        // Get the time slots for the selected day
+        return timeSlotsService.isTimeSlotAvailable(day, timeSlot);
 
-  @GetMapping("/range")
-  public ResponseEntity<List<Appointment>> getAppointmentsByRange(@RequestParam("startDate") Instant startDate, @RequestParam("endDate") Instant endDate) {
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<HashMap<String, Object>>> getAppointments(@RequestParam String date)
+            throws ExecutionException, InterruptedException {
 
 
-    appointmentService.getAppointmentsByDateRange(startDate, endDate);
-    return ResponseEntity.ok(new ArrayList<Appointment>());
+        // List<Appointment> appointments =
+        // appointmentService.getAppointmentsForDay(date);
+        try {
 
-  }
+            List<HashMap<String, Object>> appointments = appointmentService.getAppointmentsForDay(date);
+            return ResponseEntity.ok(appointments);
+
+        } catch (Exception e) {
+            //if failed to reach database
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/day")
+    public ResponseEntity<List<Appointment>> getAppointments(@RequestParam("timeStamp") Instant timeStamp)
+            throws ExecutionException, InterruptedException {
+        List<Appointment> foundAppointments = new ArrayList<>();
+
+        try {
+            foundAppointments = appointmentService.getAppointmentsForDay(timeStamp);
+            return ResponseEntity.ok(foundAppointments);
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+
+    }
+
+    @GetMapping("/range")
+    public ResponseEntity<?> getAppointmentsByRange(@RequestParam("startDate") Instant startDate, @RequestParam("endDate") Instant endDate) {
+
+        try {
+            List<Appointment> appointmentsInRange = appointmentService.getAppointmentsByDateRange(startDate, endDate);
+            return ResponseEntity.ok(appointmentsInRange);
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+
+    }
 
 }
