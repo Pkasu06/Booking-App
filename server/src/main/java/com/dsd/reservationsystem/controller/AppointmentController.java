@@ -96,6 +96,7 @@ public class AppointmentController {
   public ResponseEntity<List<Appointment>> getAppointmentsByRange(@RequestParam("startDate") Instant startDate, @RequestParam("endDate") Instant endDate) {
 
 
+    appointmentService.getAppointmentsByDateRange(startDate, endDate);
     return ResponseEntity.ok(new ArrayList<Appointment>());
 
   }
