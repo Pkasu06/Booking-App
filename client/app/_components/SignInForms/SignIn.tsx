@@ -1,7 +1,10 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
+import { signIn } from "@/auth";
 
 export default function SignIn() {
   const router = useRouter();
@@ -38,7 +41,10 @@ export default function SignIn() {
   return (
     <form
       className="w-1/3 flex flex-col justify-center p-5"
-      onSubmit={signInFormSubmitHandler}>
+      // onSubmit={signInFormSubmitHandler}
+      action={async (formData) => {
+        await signIn("credentials", formData);
+      }}>
       <h1 className="text-center mb-4 mt-1">Admin SignIn</h1>
       <label className="input input-bordered flex items-center gap-2 mb-4">
         <svg
@@ -56,6 +62,7 @@ export default function SignIn() {
           onChange={(e) => setSigninEmail(e.target.value)}
           onFocus={() => setSignInAlert("")}
           value={signinEmail}
+          name="email"
           required
         />
       </label>
@@ -72,6 +79,7 @@ export default function SignIn() {
           />
         </svg>
         <input
+          name="password"
           type="password"
           className="grow"
           placeholder="Password"

@@ -4,6 +4,9 @@ import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { auth as firebaseAuth } from "./app/firebase/config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  pages: {
+    signIn: "/login",
+  },
   providers: [
     Credentials({
       credentials: {
