@@ -14,11 +14,6 @@ export default function AdminMenu() {
   const router = useRouter();
 
   //need useEffect b/c component needs to be mounted before being able to route
-  useEffect(() => {
-    if (!user) {
-      router.push("/adminSignInAndSignUp");
-    }
-  }, [user, loading, error]);
 
   return (
     <div>

@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { authenticate } from "@/app/_lib/actions/authenticate";
 
 export default function SignIn() {
@@ -22,7 +21,6 @@ export default function SignIn() {
       className="w-1/3 flex flex-col justify-center p-5"
       action={async (formData) => {
         const response = loginDispatch(formData);
-        console.log("resp at client", response);
       }}
       // onSubmit={signInFormSubmitHandler}
     >
