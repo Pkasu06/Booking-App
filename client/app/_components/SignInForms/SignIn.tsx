@@ -1,50 +1,68 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useFormState, useFormStatus } from "react-dom";
 import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
-import { signIn } from "@/auth";
+import { signIn } from "next-auth/react";
+import { authenticate } from "@/app/lib/auth-actions/auth";
 
 export default function SignIn() {
   const router = useRouter();
+
   const [signinEmail, setSigninEmail] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
-  const [signInWithEmailAndPassword, signInUser, signInLoading, signInError] =
-    useSignInWithEmailAndPassword(auth);
+  const [loginErrorMessage, loginDispatch] = useFormState(
+    authenticate,
+    undefined
+  );
+  // const [signInWithEmailAndPassword, signInUser, signInLoading, signInError] =
+  //   useSignInWithEmailAndPassword(auth);
 
   const [signInAlert, setSignInAlert] = useState("");
-  useEffect(() => {
-    if (signInError) {
-      if (signInError.message.includes("invalid-credential")) {
-        setSignInAlert("Either email or password is incorrect");
-      } else {
-        setSignInAlert("");
-      }
-    }
-  }, [signInError]);
+  // useEffect(() => {
+  //   if (signInError) {
+  //     if (signInError.message.includes("invalid-credential")) {
+  //       setSignInAlert("Either email or password is incorrect");
+  //     } else {
+  //       setSignInAlert("");
+  //     }
+  //   }
+  // }, [signInError]);
 
   const signInFormSubmitHandler = async (e) => {
     e.preventDefault();
-    try {
-      const res = await signInWithEmailAndPassword(signinEmail, signinPassword);
-      setSigninEmail("");
-      setSigninPassword("");
-      if (res) {
-        router.push("/admin/dashboard");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
+    // try {
+    //   // const res = await signInWithEmailAndPassword(signinEmail, signinPassword);
+    //   const response = await signIn("credentials", {
+    //     redirect: false,
+    //     email: signinEmail,
+    //     password: signinPassword,
+    //   });
+    //   console.log("response from sign in", response);
+
+    //   setSigninEmail("");
+    //   setSigninPassword("");
+
+    //   if (response.error) {
+    //     console.log("error login in");
+    //   } else {
+    //     router.push("/companyservices");
+    //   }
+    // } catch (error) {
+    //   console.log("error", error);
+    // }
   };
 
   return (
     <form
       className="w-1/3 flex flex-col justify-center p-5"
-      // onSubmit={signInFormSubmitHandler}
       action={async (formData) => {
-        await signIn("credentials", formData);
-      }}>
+        const response = loginDispatch(formData);
+        console.log("resp at client", response);
+      }}
+      // onSubmit={signInFormSubmitHandler}
+    >
       <h1 className="text-center mb-4 mt-1">Admin SignIn</h1>
       <label className="input input-bordered flex items-center gap-2 mb-4">
         <svg
@@ -79,10 +97,10 @@ export default function SignIn() {
           />
         </svg>
         <input
-          name="password"
           type="password"
           className="grow"
           placeholder="Password"
+          name="password"
           onChange={(e) => setSigninPassword(e.target.value)}
           onFocus={() => setSignInAlert("")}
           value={signinPassword}
@@ -91,7 +109,7 @@ export default function SignIn() {
         />
       </label>
       <div className="min-h-[2em]">
-        {!signInError ? (
+        {/* {!signInError ? (
           <p
             className={`text-white text-xs py-2 ${signInLoading ? "visible" : "invisible"}`}>
             please wait while signing you in ...
@@ -101,7 +119,7 @@ export default function SignIn() {
             className={`text-red-500 text-xs py-2 ${signInError ? "visible" : "invisible"}`}>
             {signInError ? signInAlert : " "}
           </p>
-        )}
+        )} */}
       </div>
       <button
         type="submit"
