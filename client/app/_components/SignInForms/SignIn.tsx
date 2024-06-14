@@ -1,11 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { useFormState, useFormStatus } from "react-dom";
-import { auth } from "@/app/firebase/config";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { authenticate } from "@/app/lib/auth-actions/auth";
+import { authenticate } from "@/app/_lib/actions/authenticate";
 
 export default function SignIn() {
   const router = useRouter();
@@ -16,43 +14,8 @@ export default function SignIn() {
     authenticate,
     undefined
   );
-  // const [signInWithEmailAndPassword, signInUser, signInLoading, signInError] =
-  //   useSignInWithEmailAndPassword(auth);
 
   const [signInAlert, setSignInAlert] = useState("");
-  // useEffect(() => {
-  //   if (signInError) {
-  //     if (signInError.message.includes("invalid-credential")) {
-  //       setSignInAlert("Either email or password is incorrect");
-  //     } else {
-  //       setSignInAlert("");
-  //     }
-  //   }
-  // }, [signInError]);
-
-  const signInFormSubmitHandler = async (e) => {
-    e.preventDefault();
-    // try {
-    //   // const res = await signInWithEmailAndPassword(signinEmail, signinPassword);
-    //   const response = await signIn("credentials", {
-    //     redirect: false,
-    //     email: signinEmail,
-    //     password: signinPassword,
-    //   });
-    //   console.log("response from sign in", response);
-
-    //   setSigninEmail("");
-    //   setSigninPassword("");
-
-    //   if (response.error) {
-    //     console.log("error login in");
-    //   } else {
-    //     router.push("/companyservices");
-    //   }
-    // } catch (error) {
-    //   console.log("error", error);
-    // }
-  };
 
   return (
     <form
