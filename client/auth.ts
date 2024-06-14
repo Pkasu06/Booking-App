@@ -13,6 +13,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         email: {},
         password: {},
       },
+      //used with this specific credential to create user in token
       authorize: async (credentials) => {
         let user = null;
 
