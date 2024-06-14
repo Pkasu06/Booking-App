@@ -25,7 +25,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             password as string
           );
           const token = await userCredential.user.getIdToken();
-          return { id: userCredential.user.uid, user: userCredential };
+          return {
+            id: userCredential.user.uid,
+            user: userCredential.user,
+            idToken: token,
+          };
         } catch (error) {
           console.log("Error during sign in:", error.message);
           return null;
