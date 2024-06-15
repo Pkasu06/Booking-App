@@ -11,6 +11,7 @@ const authConfig = {
     //is use authorized if not then rout to signIn page above
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
+      // console.log("auth in auth config", auth);
       //todo CHECK firebase AUTH TOKEN
       if (isLoggedIn) return true;
 
@@ -18,7 +19,7 @@ const authConfig = {
     },
     async session({ session, token }) {
       //add data to session and will be available with getServerSession
-      // console.log('session token', token);
+      console.log("session token", token);
       // console.log(' session ', session);
       // console.log('session user ', user);
 
@@ -39,9 +40,14 @@ const authConfig = {
       //!so first time around user is truthy then second time around
       //!its not and so we just return what ever the token is as to not change it previous token is an argument on every call
       if (user) {
+        // console.log("token in jwt", Object.entries(token));
+        // console.log("user in jwt", user.user.email);
+
         return {
           ...token,
           userId: user.id,
+          //@ts-expect-error email does exist on user
+          email: user?.user?.email,
         };
       }
 
