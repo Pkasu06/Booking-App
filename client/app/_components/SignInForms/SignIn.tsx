@@ -1,45 +1,38 @@
+"use client";
 import React, { useEffect, useState } from "react";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { auth } from "@/app/firebase/config";
+import { useFormState, useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
+import { authenticate } from "@/app/_lib/actions/authenticate";
 
-export default function SignIn() {
+export default function SignIn({ callbackUrl }: { callbackUrl?: string }) {
   const router = useRouter();
+
   const [signinEmail, setSigninEmail] = useState("");
   const [signinPassword, setSigninPassword] = useState("");
-  const [signInWithEmailAndPassword, signInUser, signInLoading, signInError] =
-    useSignInWithEmailAndPassword(auth);
+  const [loginErrorMessage, loginDispatch] = useFormState(
+    authenticate,
+    undefined
+  );
 
   const [signInAlert, setSignInAlert] = useState("");
-  useEffect(() => {
-    if (signInError) {
-      if (signInError.message.includes("invalid-credential")) {
-        setSignInAlert("Either email or password is incorrect");
-      } else {
-        setSignInAlert("");
-      }
-    }
-  }, [signInError]);
-
-  const signInFormSubmitHandler = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await signInWithEmailAndPassword(signinEmail, signinPassword);
-      setSigninEmail("");
-      setSigninPassword("");
-      if (res) {
-        router.push("/admin/dashboard");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
 
   return (
     <form
       className="w-1/3 flex flex-col justify-center p-5"
-      onSubmit={signInFormSubmitHandler}>
+      action={async (formData) => {
+        const response = loginDispatch(formData);
+        console.log("response", response);
+      }}
+      // onSubmit={signInFormSubmitHandler}
+    >
       <h1 className="text-center mb-4 mt-1">Admin SignIn</h1>
+      <input
+        type="text"
+        value={callbackUrl}
+        name="callbackUrl"
+        id="callbackUrl"
+        className="hidden"
+      />
       <label className="input input-bordered flex items-center gap-2 mb-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -56,6 +49,7 @@ export default function SignIn() {
           onChange={(e) => setSigninEmail(e.target.value)}
           onFocus={() => setSignInAlert("")}
           value={signinEmail}
+          name="email"
           required
         />
       </label>
@@ -75,6 +69,7 @@ export default function SignIn() {
           type="password"
           className="grow"
           placeholder="Password"
+          name="password"
           onChange={(e) => setSigninPassword(e.target.value)}
           onFocus={() => setSignInAlert("")}
           value={signinPassword}
@@ -83,7 +78,7 @@ export default function SignIn() {
         />
       </label>
       <div className="min-h-[2em]">
-        {!signInError ? (
+        {/* {!signInError ? (
           <p
             className={`text-white text-xs py-2 ${signInLoading ? "visible" : "invisible"}`}>
             please wait while signing you in ...
@@ -93,7 +88,7 @@ export default function SignIn() {
             className={`text-red-500 text-xs py-2 ${signInError ? "visible" : "invisible"}`}>
             {signInError ? signInAlert : " "}
           </p>
-        )}
+        )} */}
       </div>
       <button
         type="submit"
