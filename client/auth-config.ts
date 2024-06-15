@@ -1,9 +1,11 @@
 import { NextAuthConfig } from "next-auth";
+const AUTH_SECRET = process.env.AUTH_SECRET;
 
 const authConfig = {
   pages: {
     signIn: "/login",
   },
+  secret: AUTH_SECRET,
   //used for creating token and session
   callbacks: {
     //is use authorized if not then rout to signIn page above
