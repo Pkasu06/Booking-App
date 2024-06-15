@@ -19,7 +19,7 @@ const authConfig = {
     },
     async session({ session, token }) {
       //add data to session and will be available with getServerSession
-      console.log("session token", token);
+      // console.log("session token", token);
       // console.log(' session ', session);
       // console.log('session user ', user);
 
