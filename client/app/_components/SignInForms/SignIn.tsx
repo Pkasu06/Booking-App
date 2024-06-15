@@ -4,7 +4,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import { authenticate } from "@/app/_lib/actions/authenticate";
 
-export default function SignIn() {
+export default function SignIn({ callbackUrl }: { callbackUrl?: string }) {
   const router = useRouter();
 
   const [signinEmail, setSigninEmail] = useState("");
@@ -21,10 +21,18 @@ export default function SignIn() {
       className="w-1/3 flex flex-col justify-center p-5"
       action={async (formData) => {
         const response = loginDispatch(formData);
+        console.log("response", response);
       }}
       // onSubmit={signInFormSubmitHandler}
     >
       <h1 className="text-center mb-4 mt-1">Admin SignIn</h1>
+      <input
+        type="text"
+        value={callbackUrl}
+        name="callbackUrl"
+        id="callbackUrl"
+        className="hidden"
+      />
       <label className="input input-bordered flex items-center gap-2 mb-4">
         <svg
           xmlns="http://www.w3.org/2000/svg"
