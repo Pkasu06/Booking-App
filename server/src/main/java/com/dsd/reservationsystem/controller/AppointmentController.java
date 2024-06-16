@@ -91,4 +91,18 @@ public class AppointmentController {
         }
 
     }
+
+    @GetMapping("/range")
+    public ResponseEntity<?> getAppointmentsByRange(@RequestParam("startDate") Instant startDate, @RequestParam("endDate") Instant endDate) {
+
+        try {
+            List<Appointment> appointmentsInRange = appointmentService.getAppointmentsByDateRange(startDate, endDate);
+            return ResponseEntity.ok(appointmentsInRange);
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+
+    }
+
 }

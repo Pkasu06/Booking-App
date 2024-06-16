@@ -1,5 +1,6 @@
 package com.dsd.reservationsystem.service;
 
+import com.dsd.reservationsystem.database.AppointmentDb;
 import com.dsd.reservationsystem.database.Db;
 import com.dsd.reservationsystem.models.Appointment;
 import com.dsd.reservationsystem.models.AppointmentPostRequest;
@@ -23,12 +24,15 @@ public class AppointmentService {
 
     private final TimeSlotsService timeSlotsService;
 
+    private final AppointmentDb appointmentDb;
+
     public AppointmentService(Db database, EmailService emailService, CustomerService customerService,
-                              TimeSlotsService timeSlotsService) {
+                              TimeSlotsService timeSlotsService, AppointmentDb appointmentDb) {
         this.database = database;
         this.emailService = emailService;
         this.customerService = customerService;
         this.timeSlotsService = timeSlotsService;
+        this.appointmentDb = appointmentDb;
     }
 
     public Appointment saveAppointment(AppointmentPostRequest appointment) {
@@ -214,4 +218,20 @@ public class AppointmentService {
 
         return appointmentList;
     }
+
+    public List<Appointment> getAppointmentsByDateRange(Instant startDate, Instant endDate) {
+
+        try {
+            List<Appointment> foundAppointments = appointmentDb.getInRange(startDate, endDate);
+            return foundAppointments;
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+
+        }
+
+
+    }
+
 }
