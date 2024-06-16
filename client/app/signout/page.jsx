@@ -1,18 +1,13 @@
 "use client";
 
-import { auth } from "../firebase/config";
-import { signOut } from "firebase/auth";
+import Link from "next/link";
+// import { auth } from "../firebase/config";
 import { useRouter } from "next/navigation";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function SignOutPage() {
   // Placeholder function for sign-out logic
-  const router = useRouter();
-  const handleSignOut = async () => {
-    await signOut(auth);
-    router.push("/");
-  };
 
   return (
     <div className=" flex items-center justify-center h-screen">
@@ -20,11 +15,11 @@ export default function SignOutPage() {
         <h1 className="text-xl font-bold mb-4 text-black">
           Are you sure you want to sign out?
         </h1>
-        <button
-          onClick={handleSignOut}
+        <Link
+          href={"/api/signout"}
           className="w-full p-2 bg-red-500 text-white rounded-md hover:bg-red-600">
           Sign Out
-        </button>
+        </Link>
         <div className="my-6">
           <p className="text-sm font-medium text-gray-700">
             I want to stay logged in -{" "}

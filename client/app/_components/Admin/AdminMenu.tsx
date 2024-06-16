@@ -46,11 +46,11 @@ export default function AdminMenu() {
           </li>
         ))}
         <li>
-          <button
+          <Link
             className="btn"
-            onClick={() => signOut(auth)}>
+            href={"/signout"}>
             Sign Out
-          </button>
+          </Link>
         </li>
       </ul>
     </div>
