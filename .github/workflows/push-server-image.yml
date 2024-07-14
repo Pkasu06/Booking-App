@@ -5,7 +5,7 @@ on:
     # paths:
     #   - "server/**"
 jobs:
-  Explore-GitHub-Actions:
+  Push-Server-Image:
     runs-on: ubuntu-latest
     env:
       CREDENTIALS_PATH: credentials.json
@@ -49,7 +49,7 @@ jobs:
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/java-server -f server/Dockerfile .
 
       - name: Push Docker Image
-        run: "docker push ${{ secrets.DOCKER_USERNAME }}/Booking-app-java-api:${{github.sha:0:9}}"
+        run: "docker push ${{ secrets.DOCKER_USERNAME }}/Booking-app-java-api:${{ github.ref_name }}"
 
         #- run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
         #- run: echo "🖥️ The workflow is now ready to test your code on the runner."
