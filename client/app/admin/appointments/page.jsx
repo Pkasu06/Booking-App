@@ -42,11 +42,16 @@ export default function AppointmentsPage() {
     let parts = partsData?.filter((part) => partsIds.includes(part.id));
     return parts?.map((part) => part.name).join(", ");
   };
+
+  //pagination
   const indexOfLastAppointment = currentPage * appointmentsPerPage;
   const indexOfFirstAppointment = indexOfLastAppointment - appointmentsPerPage;
-  let currentAppointments = null;
+  let currentAppointments = [];
+
   let totalPages = 0;
-  if (appointmentsListData) {
+
+  //only create pagination if appointment data exists
+  if (appointmentsListData.length) {
     currentAppointments =
       appointmentsListData.length >= appointmentsPerPage
         ? appointmentsListData.slice(
@@ -56,19 +61,6 @@ export default function AppointmentsPage() {
         : appointmentsListData;
     totalPages = Math.ceil(appointmentsListData.length / appointmentsPerPage);
   }
-  // const [currentAppointments, setCurrentAppointments] = useState(null);
-  // const [totalPages, setTotalPages] = useState(0);
-  // useEffect(() => {
-  // 	if (appointmentsListData) {
-  // 		tempCurrentAppointments =
-  // 			appointmentsListData.length >= appointmentsPerPage
-  // 				? appointmentsListData.slice(indexOfFirstAppointment, indexOfLastAppointment)
-  // 				: appointmentsListData;
-  // 		tempTotalPages = Math.ceil(appointmentsListData.length / appointmentsPerPage);
-  // 		setCurrentAppointments(tempCurrentAppointments);
-  // 		setTotalPages(tempTotalPages);
-  // 	}
-  // }, [appointmentsListData]);
 
   useEffect(() => {
     getAppointmentsData();
