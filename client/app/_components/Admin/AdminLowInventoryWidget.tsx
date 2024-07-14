@@ -1,28 +1,21 @@
 import useGetParts from "@/app/_hooks/part-api/useGetParts";
-import React from "react";
+import React, { useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export default function AdminLowInventoryWidget() {
   let lowInventory = false;
   const {
-    data: getPartsData,
+    data: partsData,
     isLoading: getPartsIsLoading,
     error: getPartsError,
+    fetchData: getPartsData,
   } = useGetParts(lowInventory);
 
-  const findLowInventoryParts = (partsInventory) => {
-    let lowInventoryParts = [];
-    for (let i = 0; i < partsInventory.length; i++) {
-      let lowInventoryPart = { name: "", quantity: 0 };
-      if (partsInventory[i].quantity < partsInventory[i].threshold) {
-        lowInventoryPart.name = partsInventory[i].name;
-        lowInventoryPart.quantity = partsInventory[i].quantity;
-        lowInventoryParts.push(lowInventoryPart);
-      }
-    }
-    return lowInventoryParts;
-  };
-  let lowInventoryList = findLowInventoryParts(getPartsData);
+  useEffect(() => {
+    getPartsData();
+  }, []);
+
+  let lowInventoryList = findLowInventoryParts(partsData);
 
   if (getPartsIsLoading) {
     return (
@@ -77,4 +70,17 @@ export default function AdminLowInventoryWidget() {
       </table>
     </div>
   );
+}
+
+function findLowInventoryParts(partsInventory) {
+  let lowInventoryParts = [];
+  for (let i = 0; i < partsInventory.length; i++) {
+    let lowInventoryPart = { name: "", quantity: 0 };
+    if (partsInventory[i].quantity < partsInventory[i].threshold) {
+      lowInventoryPart.name = partsInventory[i].name;
+      lowInventoryPart.quantity = partsInventory[i].quantity;
+      lowInventoryParts.push(lowInventoryPart);
+    }
+  }
+  return lowInventoryParts;
 }

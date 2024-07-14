@@ -9,7 +9,7 @@ export default function useGetAppointments(date) {
     setError(null);
     try {
       setIsLoading(true);
-      console.log("date", date);
+      // console.log("date", date);
 
       const res = await fetchAppointmentsData({
         date,
@@ -23,7 +23,7 @@ export default function useGetAppointments(date) {
         setData(res.data);
         setError(null);
       }
-      console.log("🚀 ~ fetchData ~ res.data:", res.data);
+      // console.log("🚀 ~ fetchData ~ res.data:", res.data);
     } catch (error) {
       console.log("failed to fetch appointment Data", error);
       setData([]);
@@ -43,6 +43,6 @@ async function fetchAppointmentsData({ date }) {
     throw new Error("Network response was not ok");
   }
   const data = await response.json();
-  console.log("🚀 ~ fetchAppointmentsData ~ data:", data);
+
   return data;
 }
