@@ -103,8 +103,8 @@ export default function AppointmentsPage() {
             </tr>
           </thead>
           <tbody>
-            {currentAppointments ? (
-              currentAppointments.map((appointment, index) => {
+            {appointmentsListData ? (
+              appointmentsListData.map((appointment, index) => {
                 return (
                   <tr
                     key={index}
