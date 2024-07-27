@@ -52,7 +52,7 @@ public class Db {
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 this.database = FirestoreClient.getFirestore();
-                System.out.println('failed to create firestore instance');
+                System.out.println("failed to create firestore instance");
 
             }
         }
