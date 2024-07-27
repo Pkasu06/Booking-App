@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is building server image
 on:
   push:
     paths:
-      - "server/**"
+      # - "server/**"
 jobs:
   Push-Server-Image:
     runs-on: ubuntu-latest
