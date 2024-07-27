@@ -46,10 +46,12 @@ jobs:
           password: ${{secrets.DOCKER_PASSWORD}}
 
       - name: Build Docker Image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/booking-app-java-api:${{ github.ref_name }} -f server/Dockerfile .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/booking-app-java-api:${{ github.sha }} -t ${{ secrets.DOCKER_USERNAME }}/booking-app-java-api:latest -f server/Dockerfile .
+        # run: docker build -t ${{ secrets.DOCKER_USERNAME }}/booking-app-java-api:${{ github.ref_name }} -f server/Dockerfile .
 
       - name: Push Docker Image
-        run: "docker push ${{ secrets.DOCKER_USERNAME }}/booking-app-java-api:${{ github.ref_name }}"
+        run: "docker push -a ${{ secrets.DOCKER_USERNAME }}/booking-app-java-api"
+        # run: "docker push ${{ secrets.DOCKER_USERNAME }}/booking-app-java-api:${{ github.ref_name }}"
         # maybe on merge create a latest tag build
 
         #- run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
