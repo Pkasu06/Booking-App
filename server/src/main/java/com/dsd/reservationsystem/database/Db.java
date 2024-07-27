@@ -36,6 +36,7 @@ public class Db {
         if (this.database == null) {
 
             try {
+
                 InputStream serviceAccount = new FileInputStream(credentialsPath);
                 GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
                 FirebaseOptions options = new FirebaseOptions.Builder()
@@ -51,7 +52,6 @@ public class Db {
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                this.database = FirestoreClient.getFirestore();
                 System.out.println("failed to create firestore instance");
 
             }
