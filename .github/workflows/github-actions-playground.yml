@@ -3,7 +3,7 @@ run-name: playground file
 on:
   push:
 jobs:
-  Push-Server-Image:
+  Print-out-context:
     runs-on: ubuntu-latest
     env:
       CREDENTIALS_PATH: credentials.json
