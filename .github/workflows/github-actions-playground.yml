@@ -1,4 +1,4 @@
-name: Build and Push server Image
+name: playground
 run-name: ${{ github.actor }} is building server image
 on:
   push:
