@@ -1,5 +1,5 @@
 name: playground
-run-name: ${{ github.actor }} is building server image
+run-name: playground file
 on:
   push:
 jobs:
