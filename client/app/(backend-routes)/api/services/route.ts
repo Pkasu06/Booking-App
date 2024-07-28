@@ -33,18 +33,10 @@ export async function GET(request: NextRequest) {
 
 async function getServicesList(): Promise<servicesData[]> {
   const response = await fetch(`${API_URL}/services`);
+
+  if (!response.ok) {
+    throw Error("Error getting data from server");
+  }
   const data: servicesData[] = await response.json();
   return data;
 }
-
-// Response.json({
-//   Mes: "Hello, Next.js!",
-//   env: process.env.API_URL,
-// });
-
-// return new Response(
-//   { Mes: "Hello, Next.js!", env: process.env.API_URL },
-//   {
-//     status: 200,
-//   }
-// );

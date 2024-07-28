@@ -1,0 +1,67 @@
+name: playground
+run-name: playground file
+on:
+  push:
+jobs:
+  Print-out-context:
+    runs-on: ubuntu-latest
+    env:
+      CREDENTIALS_PATH: credentials.json
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - run: echo "🔎 Github context"
+      - run: echo "github.action ${{ github.action }}"
+      - run: echo "github.action_path ${{ github.action_path }}"
+      - run: echo "github.action_ref ${{ github.action_ref }}"
+      - run: echo "github.base_ref ${{ github.base_ref }}"
+      - run: echo "github.ref ${{ github.ref }}"
+      - run: echo "github.ref_name ${{ github.ref_name }}"
+      - run: echo "github.sha ${{ github.sha }}"
+
+      # - name: Check out repository code
+      #   uses: actions/checkout@v4
+
+      # - name: Set up JDK 17
+      #   uses: actions/setup-java@v2
+      #   with:
+      #     distribution: "temurin"
+      #     java-version: "17"
+
+      # - name: Grant execute permission for gradlew
+      #   run: chmod +x ./server/gradlew
+
+      # - name: Build Java with Gradle
+      #   working-directory: server
+      #   run: ./gradlew build
+
+      # - name: Verify JAR file exists
+      #   working-directory: server
+      #   run: |
+      #     ls build/libs
+      #     if [ ! -f build/libs/*.jar ]; then
+      #       echo "JAR file not found!"
+      #       exit 1
+      #     fi
+
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{secrets.DOCKER_USERNAME}}
+      #     password: ${{secrets.DOCKER_PASSWORD}}
+
+      # - name: Build Docker Image
+      #   run: docker build -t ${{ secrets.DOCKER_USERNAME }}/booking-app-java-api:${{ github.ref_name }} -f server/Dockerfile .
+
+      # - name: Push Docker Image
+      #   run: "docker push ${{ secrets.DOCKER_USERNAME }}/booking-app-java-api:${{ github.ref_name }}"
+      # maybe on merge create a latest tag build
+
+      #- run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      #- run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      #- name: List files in the repository
+      # run: |
+      # ls ${{ github.workspace }}
+      # - run: echo "🍏 This job's status is ${{ job.status }}."
+      # pushtest again
