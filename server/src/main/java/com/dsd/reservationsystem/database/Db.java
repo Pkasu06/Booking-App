@@ -34,18 +34,27 @@ public class Db {
 
         System.out.println(credentialsPath);
         if (this.database == null) {
-            InputStream serviceAccount = new FileInputStream(credentialsPath);
-            GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
-            FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(credentials)
-                    .build();
 
-            // Check if FirebaseApp has already been initialized
-            if (FirebaseApp.getApps().isEmpty()) {
-                FirebaseApp.initializeApp(options);
+            try {
+
+                InputStream serviceAccount = new FileInputStream(credentialsPath);
+                GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
+                FirebaseOptions options = new FirebaseOptions.Builder()
+                        .setCredentials(credentials)
+                        .build();
+
+                // Check if FirebaseApp has already been initialized
+                if (FirebaseApp.getApps().isEmpty()) {
+                    FirebaseApp.initializeApp(options);
+                }
+
+                this.database = FirestoreClient.getFirestore();
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println("failed to create firestore instance");
+
             }
-
-            this.database = FirestoreClient.getFirestore();
         }
     }
 
